@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @media print {
+            header nav, footer {
+            display: none !important;
+            }
+            /* Hide elements with the class 'hide-on-print' when printing */
+            .hide-on-print {
+                padding-top: 0;
+                margin-top: 0;
+                display: none !important;
+                color: #000000 !important;
+                height: 0px;
+            }
+            .custom-select-option {
+                border: none;
+                padding-top: 0;
+                margin-top: 0;
+                color: #000000 !important;
+            }
+            .textcode{
+                padding: 0 !important;
+                color: #000000 !important;
+                /* margin-bottom: 30px !important; */
+                padding-bottom: 30px !important;
+            }
+            .button{
+                padding: 0 !important;
+            }
+            hr{
+                /* margin-top: 5px !important; */
+                display: block !important;
+                border-top: 1px solid #000000 !important;
+            }
+        }
+        @page {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="hide-on-print" style="padding-top: 1.5rem">
+        <div class="button">
+            <h1>Tạo Mã Voucher</h1>
+        </div>
+    </div>
+     <!-- select box -->
+     <div>
+        <div class="button">
+            <select value="109" class="custom-select-option">
+                <option value="109"> 109 Chu Văn An</option>
+                <option value="35D5"> 35D5 Bình Thạnh</option>
+                <option value="635"> 635 Điện Biên Phủ</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <div class="button">
+            <!-- <span class="hide-on-print">Voucher Code: </span> -->
+            <span id="uniqueCode" class="textcode"></span>
+        </div>
+    </div>
+    <hr>
+    <!-- <button onclick="generateAndPrintCode()" class="hide-on-print">Lấy Mã</button> -->
+    <div class="hide-on-print" style="padding-top: 1.5rem;">
+        <div class="button">
+            <a class="down" id='func' href="javascript:void(0);" onclick="generateAndPrintCode();">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <p  id="login" style="font-size: 1rem; align-items: center; margin: 10px auto;">Lấy Mã</p>
+            </a>
+        </div>
+    </div>
+<style>
+body {
+    background-color: #1c3833;
+}
+hr{
+    display: none;
+}
+/* design button  */
+.button{
+  position: relative;
+  margin: 0;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+.down{
+  position: relative;
+  padding: 10px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  background: rgba(255,255,255,.1);
+  box-shadow: 0 5px 5px rgba(0,0,0,.2);
+  /* font-weight: bolder; */
+  overflow: hidden;
+  border-radius: 5px;
+  width: 400px;
+  text-align: center;
+}
+
+.down:before{
+  content: '';
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: rgba(255,255,255,.1);
+  
+}
+.down:after{
+  content: '';
+  position: absolute;
+  top:0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+  transition: 0.5s;
+  transition-delay: 0.3s;
+}
+.down:hover:after{
+  left: 100%;
+}
+
+.down span{
+  position: absolute;
+  display: block;
+  transition: 0.5s ease;
+}
+ .down span:nth-child(1){
+    top:0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #fff;
+    
+}
+.down:hover span:nth-child(1){
+    width: 100%;
+    transform: translateX(100%);
+}
+.down span:nth-child(3){
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 1px;
+    background: #fff;
+    
+}
+.down:hover span:nth-child(3){
+    width: 100%;
+    transform: translateX(-100%);
+}
+.down span:nth-child(2){
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 0;
+    background: #fff;
+}
+.down:hover span:nth-child(2){
+    height: 100%;
+    transform: translateY(100%);
+}
+.down span:nth-child(4){
+    bottom: 0;
+    right: 0;
+    width: 1px;
+    height: 0;
+    background: #fff;
+}
+.down:hover span:nth-child(4){
+    height: 100%;
+    transform: translateY(-100%);
+}
+/* select box */
+/*!*************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/custom-select.css ***!
+  \*************************************************************************/
+.custom-select-option {
+    font-size: 20px;
+    color: #fff;
+    padding: 10px;
+    cursor: pointer;
+    width: 350px;
+    background-color: #1c3833;
+    border-radius: 5px;
+    text-align-last:center;
+}
+
+.custom-select-option:hover {
+    background: #c4ddf1;
+    color: #333;
+}
+#uniqueCode{
+    font-size: 40px;
+}
+</style>
+<script>
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     generateAndPrintCode();
+    // });
+
+    function generateAndPrintCode() {
+        // Fixed 5-character string
+        var fixedString = document.querySelector(".custom-select-option").value;
+        console.log(document.querySelector(".custom-select-option").value)
+        // Generate random 2-character prefix and suffix
+        //   var randomPrefix = generateRandomCharacters(2);
+        //   var randomSuffix = generateRandomCharacters(2);
+
+        var randomPrefix = generateRandomCode();
+        var randomSuffix = generateRandomCode();
+
+        // Combine prefix, fixed string, and suffix
+        var generatedCode = randomPrefix + fixedString + randomSuffix;
+        // Lưu mã vào Local Storage và kiểm tra trùng lặp
+        saveCodeToLocalStore(generatedCode);
+        
+    }
+
+    function generateRandomCharacters(length) {
+        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        var randomChars = "";
+        for (var i = 0; i < length; i++) {
+            var randomIndex = Math.floor(Math.random() * characters.length);
+            randomChars += characters.charAt(randomIndex);
+        }
+
+        return randomChars;
+    }
+    
+    function generateRandomCode() {
+        // Hàm để tạo ký tự ngẫu nhiên từ '0' đến 'Z'
+        function getRandomChar() {
+            const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            return characters.charAt(randomIndex);
+        }
+
+        let code = '';
+        let sum = 0;
+
+        // Tạo mã hai ký tự
+        for (let i = 0; i < 2; i++) {
+            const randomChar = getRandomChar();
+            code += randomChar;
+            sum += randomChar.charCodeAt(0); // Lấy mã Unicode của ký tự
+            // console.log('test', sum % 3)
+        }
+
+        // Kiểm tra xem tổng giá trị của mã có chia hết cho 3 hay không
+        if (sum % 3 !== 0) {
+            // Nếu không chia hết cho 3, thử lại
+            return generateRandomCode();
+        }
+
+        return code;
+    }
+
+    // Hàm để kiểm tra xem mã có trùng với danh sách hay không
+    function isCodeDuplicate(code, codeList) {
+        return codeList.includes(code);
+    }
+    // Hàm để lưu mã vào Local Storage
+    function saveCodeToLocalStore(code) {
+        let codeList = JSON.parse(localStorage.getItem('codeList')) || [];
+        
+        // Kiểm tra xem có trùng mã hay không
+        if (!isCodeDuplicate(code, codeList)) {
+            codeList.push(code);
+            // window.localStorage.setItem
+            localStorage.setItem('codeList', JSON.stringify(codeList));
+            // Lấy data từ Local Storage
+            const storedCode = localStorage.getItem('codeList');
+            console.log(JSON.parse(storedCode));
+            // Display the generated code on the webpage
+            document.getElementById("uniqueCode").innerText = code;
+             // Print the generated code
+             const options = {
+                silent: true,
+                };
+            window.print(options);
+        } else {
+            console.log('Mã bị trùng. Thử lại.');
+            // Display the generated code on the webpage
+            document.getElementById("uniqueCode").innerText = "Mã bị trùng. Thử lại";
+        }
+    }
+
+    document.querySelector(".custom-select-option").addEventListener("change", function (e) {
+        document.querySelector("#uniqueCode").innerHTML=''
+    });
+</script>
+
+</body>
+</html>
